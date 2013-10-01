@@ -37,8 +37,8 @@ var EditUser = Backbone.View.extend({
     hideFlash();
     var that = this;
     if(options.id){
-      var user = new User({id: options.id});
-      user.fetch({
+      that.user = new User({id: options.id});
+      that.user.fetch({
         success: function(user){
           var template = _.template($("#editUser").html(), {user: user});
           that.$el.html(template);
@@ -56,7 +56,8 @@ var EditUser = Backbone.View.extend({
   }
   ,
   events: {
-    "submit .editUserForm": "saveUser"
+    "submit .editUserForm": "saveUser",
+    "click .editUserForm .delete": "deleteUser"
   },
   saveUser: function(e){
     toggleDoms($(".editUserForm img.dn"), $(".editUserForm button[type='submit']"))
@@ -74,6 +75,15 @@ var EditUser = Backbone.View.extend({
       },
       error: function() {
         displayFlash("Something went wrong, please try after some time", "alert-danger");
+        router.navigate("", {trigger: true});
+      }
+    })
+    return false;
+  },
+  deleteUser: function(e){
+    this.user.destroy({
+      success: function(response){
+        displayFlash("User deleted successfully!", "alert-info");
         router.navigate("", {trigger: true});
       }
     })

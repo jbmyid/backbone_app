@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   layout "public"
+  before_action :find_user, only: [:edit, :show, :destroy]
   def index
     users = User.select("id, name, email, age")
     respond_to do |format|
@@ -18,17 +19,20 @@ class UsersController < ApplicationController
   end
 
   def show
-    user = User.find(params[:id])
     respond_to do |format|
       format.html
-      format.json { render js: user.to_json }
+      format.json { render js: @user.to_json }
     end
   end
 
   def update
-    user = User.find(params[:id])
-    user.update_attributes(user_params)
-    render json: {status: !user.errors.any?, errors: user.errors.full_messages}
+    @user.update_attributes(user_params)
+    render json: {status: !@user.errors.any?, errors: @user.errors.full_messages}
+  end
+
+  def destroy
+    @user.destroy
+    render json: {status: @user.destroy}
   end
 
   private

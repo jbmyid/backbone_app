@@ -26,14 +26,14 @@
       </div>
     </div>
     <hr>
-    <%% if(user) { %>
-      <input type='hidden' name="id" value="<%%= user.id %>" %>
-      <button class="btn btn-danger delete"> Delete </button>
-    <%% }; %>
     <div class="form-group well">
       <div class="col-lg-offset-2 col-lg-10">
         <button type="submit" class="btn btn-default"><%%= user ? "Update user": "Create User" %></button>
         <%= image_tag "loader.gif", class: "dn loader" %>
+        <%% if(user) { %>
+          <input type='hidden' name="id" value="<%%= user.id %>" %>
+          <button type='button' class="btn btn-danger delete"> Delete User</button>
+        <%% }; %>
       </div>
     </div>
   </form>
