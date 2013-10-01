@@ -65,13 +65,19 @@ var EditUser = Backbone.View.extend({
     var user = new User();
     user.save(userDetail,{
       success: function(response){
+        $(".errorSpan").remove();
         toggleDoms($(".editUserForm button[type='submit']"), $(".editUserForm img"));
         if (response.get('status')){
           router.navigate("", {trigger: true}); // Redirect to root i.e. Users#index page
           displayFlash("User created successfully", 'alert-success');
         }
-        else
-          displayFlash(response.get("errors").join(", "), 'alert-danger');
+        else{
+          var error_dom = "";
+          _.each(response.get("errors"), function(errors, attr){
+            error_dom = "<span class='help-block errorSpan'>" + errors + "</span>";
+            $(error_dom).insertAfter("input[name="+ attr +"]");
+          });
+        }
       },
       error: function() {
         displayFlash("Something went wrong, please try after some time", "alert-danger");
@@ -93,7 +99,6 @@ var EditUser = Backbone.View.extend({
 
 //Events
 var router = new Router();
-
 var userList = new UserList();
 var editUser = new EditUser();
 router.on("route:home", function(){
@@ -102,5 +107,4 @@ router.on("route:home", function(){
 router.on("route:editUser", function(id){
   editUser.render({id: id});
 });
-
 Backbone.history.start();

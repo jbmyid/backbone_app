@@ -12,7 +12,7 @@ class UsersController < ApplicationController
   def create
     user = User.new(user_params)
     user.save
-    render json: {status: !user.errors.any?, errors: user.errors.full_messages}
+    render json: {status: !user.errors.any?, errors: user.validation_errors}
     # respond_to do |format|
     #   format.json {  render json: {status: !user.errors.any?, errors: user.errors.full_messages} }
     # end
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
 
   def update
     @user.update_attributes(user_params)
-    render json: {status: !@user.errors.any?, errors: @user.errors.full_messages}
+    render json: {status: !@user.errors.any?, errors: @user.validation_errors}
   end
 
   def destroy
